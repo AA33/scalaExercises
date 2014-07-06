@@ -225,7 +225,7 @@ class Cons(val head: Tweet, val tail: TweetList) extends TweetList {
       tail.reverse(new Cons(head, tail))
     }
   }
-  override def toString() = "{" + head + tail.toString + "}"
+  override def toString() = "{" + head.text + tail.toString + "}"
 }
 
 object GoogleVsApple {
@@ -249,7 +249,5 @@ object GoogleVsApple {
 
 object Main extends App {
   // Print the trending tweets
-  println("Hello")
-  println(GoogleVsApple.trending.toString())
   GoogleVsApple.trending foreach println
 }
