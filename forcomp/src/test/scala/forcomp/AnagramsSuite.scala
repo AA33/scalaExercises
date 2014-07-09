@@ -29,12 +29,10 @@ class AnagramsSuite extends FunSuite {
   test("word anagrams: married") {
     assert(wordAnagrams("married").toSet === Set("married", "admirer"))
   }
-  /*
+
   test("word anagrams: player") {
     assert(wordAnagrams("player").toSet === Set("parley", "pearly", "player", "replay"))
   }
-
-
 
   test("subtract: lard - r") {
     val lard = List(('a', 1), ('d', 1), ('l', 1), ('r', 1))
@@ -42,8 +40,6 @@ class AnagramsSuite extends FunSuite {
     val lad = List(('a', 1), ('d', 1), ('l', 1))
     assert(subtract(lard, r) === lad)
   }
-
-
 
   test("combinations: []") {
     assert(combinations(Nil) === List(Nil))
@@ -60,12 +56,9 @@ class AnagramsSuite extends FunSuite {
       List(('a', 2), ('b', 1)),
       List(('b', 2)),
       List(('a', 1), ('b', 2)),
-      List(('a', 2), ('b', 2))
-    )
+      List(('a', 2), ('b', 2)))
     assert(combinations(abba).toSet === abbacomb.toSet)
   }
-
-
 
   test("sentence anagrams: []") {
     val sentence = List()
@@ -94,9 +87,8 @@ class AnagramsSuite extends FunSuite {
       List("Uzi", "Rex", "null"),
       List("Zulu", "nil", "Rex"),
       List("rulez", "Linux"),
-      List("Linux", "rulez")
-    )
+      List("Linux", "rulez"))
     assert(sentenceAnagrams(sentence).toSet === anas.toSet)
-  }  
-*/
+  }
+
 }

@@ -93,22 +93,15 @@ object Anagrams {
    *  Note that the order of the occurrence list subsets does not matter -- the subsets
    *  in the example above could have been displayed in some other order.
    */
-  def combinations(occurrences: Occurrences): List[Occurrences] = {
-    def combOfOne(ch: Char, times: Int): Occurrences = {
-      for {
+  def combinations(occurrences: Occurrences): List[Occurrences] = occurrences match {
+    case List() => List(List())
+    case (ch, times) :: tail => {
+      val tailCombs = combinations(tail)
+      tailCombs ::: (for {
+        xcomb <- tailCombs
         i <- 1 to times
-      } yield (ch, i)
-    }.toList ::: List()
-
-    def cartesian(c1: Occurrences, c2: Occurrences) = {
-      for {
-        a <- c1
-        b <- c2
-      } yield List(a, b)
+      } yield (ch, i) :: xcomb)
     }
-
-    occurrences.map({ case (ch: Char, times: Int) => combOfOne(ch, times) }).foldLeft(List[Occurrences]())({ case (c1: Occurrences, c2: Occurrences) => cartesian(c1, c2) })
-
   }
 
   /**
@@ -124,7 +117,17 @@ object Anagrams {
    */
   def subtract(x: Occurrences, y: Occurrences): Occurrences = x match {
     case List() => List()
-    case (ch: Char, times: Int) :: restOcc => (ch, times - y.find(_._1 == ch).get._2) :: subtract(restOcc, y)
+    case (ch: Char, times: Int) :: restOcc => {
+      if (y.filter(_._1 == ch).isEmpty) {
+        (ch, times) :: subtract(restOcc, y)
+      } else {
+        val newTimes = times - y.find(_._1 == ch).get._2
+        if (newTimes >= 1)
+          (ch, newTimes) :: subtract(restOcc, y)
+        else
+          subtract(restOcc, y)
+      }
+    }
   }
 
   /**
@@ -168,6 +171,18 @@ object Anagrams {
    *
    *  Note: There is only one anagram of an empty sentence.
    */
-  def sentenceAnagrams(sentence: Sentence): List[Sentence] = ???
+  def sentenceAnagrams(sentence: Sentence): List[Sentence] = {
+    def anagramHelper(occ: Occurrences): List[Sentence] = occ match {
+      case List() => List(List())
+      case _ =>
+        for {
+          combs <- combinations(occ)
+          word <- dictionaryByOccurrences.getOrElse(combs, List())
+          sentence <- anagramHelper(subtract(occ, wordOccurrences(word)))
+          if !combs.isEmpty
+        } yield word :: sentence
+    }
+    anagramHelper(sentenceOccurrences(sentence))
+  }
 
 }
